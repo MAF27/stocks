@@ -1,0 +1,20 @@
+{
+	"camelcase": false,
+	"curly": true,
+	"browser": true,
+	"eqeqeq": true,
+	"esnext": true,
+	"expr": true,
+	"forin": true,
+	"immed": true,
+	"latedef": "nfunc",
+	"newcap": false,
+	"noarg": true,
+	"nonbsp": true,
+	"node": true,
+	"nonbsp": true,
+	"quotmark": "single",
+	"undef": true,
+	"unused": "vars",
+	"trailing": true
+}
