@@ -2,9 +2,29 @@
 angular.module('sl', [])
 	.controller('slCtrl', ['$http', function($http) {
 		var vm = this;
+		var ws = new WebSocket('ws://localhost:3000');
 
-		vm.symbols = ['TSLA', 'NVDA', 'YHOO'];
-		// vm.symbols = ['TSLA', 'NVDA', 'YHOO', 'AAPL'];
+		ws.onmessage = function(payload) {
+			if (payload) {
+				var msg = JSON.parse(payload.data);
+				console.log('* ON MESSAGE: ', msg);
+				switch (msg.action) {
+					case 'init':
+						// Load stocks into chart and Angular div
+						vm.symbols = [];
+						for (var i = 0; i < msg.symbols.length; i++) {
+							setStock(msg.symbols[i], errFunc);
+						}
+						break;
+					case 'add':
+							setStock(msg.symbol, errFunc);
+						break;
+						case 'remove':
+							vm.removeSymbol(msg.symbol);
+							break;
+				}
+			}
+		};
 
 		var makeChart = function() {
 			vm.chart = AmCharts.makeChart('chartdiv', {
@@ -141,6 +161,7 @@ angular.module('sl', [])
 
 					vm.chart.dataSets.push(dataSet);
 					vm.chart.validateData();
+					vm.symbols.push(symbol);
 
 					callback(false);
 				})
@@ -150,7 +171,7 @@ angular.module('sl', [])
 				});
 		};
 
-		vm.addSymbol = function() {
+		vm.addStock = function() {
 			var s = vm.s.toUpperCase();
 			vm.s = '';
 
@@ -163,7 +184,10 @@ angular.module('sl', [])
 						vm.msg = 'Apologies, could not add symbol "' + s + '"';
 					} else {
 						vm.msg = 'Added symbol "' + s + '"';
-						vm.symbols.push(s);
+						ws.send(JSON.stringify({
+							'action': 'add',
+							symbol: s
+						}));
 					}
 				});
 			}
@@ -171,13 +195,21 @@ angular.module('sl', [])
 
 		vm.removeSymbol = function(stock) {
 			var idx = vm.symbols.indexOf(stock);
-			vm.symbols.splice(idx, 1);
 
-			// Remove stock from datasets array
-			for (var i = 0; i < vm.chart.dataSets.length; i++) {
-				if (vm.chart.dataSets[i].title === stock) {
-					vm.chart.dataSets.splice(idx, 1);
-					vm.chart.validateData();
+			// If symbol is still in list (may not be the case if change happened on this client)
+			if (idx > -1) {
+				vm.symbols.splice(idx, 1);
+				ws.send(JSON.stringify({
+					'action': 'remove',
+					symbol: stock
+				}));
+
+				// Remove stock from datasets array
+				for (var i = 0; i < vm.chart.dataSets.length; i++) {
+					if (vm.chart.dataSets[i].title === stock) {
+						vm.chart.dataSets.splice(idx, 1);
+						vm.chart.validateData();
+					}
 				}
 			}
 		};
@@ -190,8 +222,4 @@ angular.module('sl', [])
 
 		makeChart();
 
-		// Load Stocks
-		for (var i = 0; i < vm.symbols.length; i++) {
-			setStock(vm.symbols[i], errFunc);
-		}
 }]);
