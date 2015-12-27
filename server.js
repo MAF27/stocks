@@ -1,8 +1,9 @@
 var express = require('express');
 var WebSocketServer = require('ws')
 	.Server;
+var wsport = process.env.PORT || 14163;
 var wss = new WebSocketServer({
-	port: 3000
+	port: wsport
 });
 var initSymbols = ['TSLA', 'NVDA', 'YHOO'];
 var app = express();
