@@ -4,7 +4,8 @@ var angular = require('angular');
 angular.module('sl', [])
 	.controller('slCtrl', ['$http', '$scope', function($http, $scope) {
 		var vm = this;
-		var ws = new WebSocket('ws://' + window.location.hostname + ':3000');
+		var port = process.env.PORT || 3000;
+		var ws = new WebSocket('ws://' + window.location.hostname + ':' + port);
 
 		var errFunc = function(err) {
 			if (err) {
