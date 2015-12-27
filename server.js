@@ -7,19 +7,18 @@ var initSymbols = ['TSLA', 'NVDA', 'YHOO'];
 
 wss.on('connection', function(ws) {
 	ws.on('message', function(message) {
-    console.log('* WS.ON: message: ', message);
     if (message) {
       var msg = JSON.parse(message);
       switch (msg.action) {
         case 'add':
-          if (initSymbols.indexOf(msg.symbol) === -1) {
-            initSymbols.push(msg.symbol);
+          if (initSymbols.indexOf(msg.stock) === -1) {
+            initSymbols.push(msg.stock);
             console.log('* New Server State: ', initSymbols);
           }
           break;
           case 'remove':
-            if (initSymbols.indexOf(msg.symbol) > -1) {
-              initSymbols.splice(initSymbols.indexOf(msg.symbol), 1);
+            if (initSymbols.indexOf(msg.stock) > -1) {
+              initSymbols.splice(initSymbols.indexOf(msg.systockmbol), 1);
               console.log('* New Server State: ', initSymbols);
             }
             break;
@@ -31,8 +30,7 @@ wss.on('connection', function(ws) {
 
 	});
 
-  var init = { action: 'init', symbols: initSymbols };
-  console.log('* WS ON: New Client, sending ' + init.symbols);
+  var init = { action: 'init', stocks: initSymbols };
   ws.send(JSON.stringify(init));
 });
 

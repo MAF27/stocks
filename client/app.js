@@ -1,36 +1,24 @@
-/* globals angular, AmCharts */
-angular.module('sl', [])
-	.controller('slCtrl', ['$http', function($http) {
-		var vm = this;
-		var ws = new WebSocket('ws://localhost:3000');
+/* globals AmCharts */
+var angular = require('angular');
 
-		ws.onmessage = function(payload) {
-			if (payload) {
-				var msg = JSON.parse(payload.data);
-				console.log('* ON MESSAGE: ', msg);
-				switch (msg.action) {
-					case 'init':
-						// Load stocks into chart and Angular div
-						vm.symbols = [];
-						for (var i = 0; i < msg.symbols.length; i++) {
-							setStock(msg.symbols[i], errFunc);
-						}
-						break;
-					case 'add':
-							setStock(msg.symbol, errFunc);
-						break;
-						case 'remove':
-							vm.removeSymbol(msg.symbol);
-							break;
-				}
+angular.module('sl', [])
+	.controller('slCtrl', ['$http', '$scope', function($http, $scope) {
+		var vm = this;
+		var ip = process.env.IP || 'localhost';
+		var ws = new WebSocket('ws://' + ip + ':3000');
+
+		var errFunc = function(err) {
+			if (err) {
+				console.log('Error getting data for initial set of stocks.');
 			}
 		};
 
-		var makeChart = function() {
+		var drawChart = function() {
 			vm.chart = AmCharts.makeChart('chartdiv', {
 				type: 'stock',
 				theme: 'dark',
 
+				pathToImages: './images/',
 				dataSets: [], // will be set dynamically
 
 				panels: [{
@@ -126,8 +114,8 @@ angular.module('sl', [])
 			});
 		};
 
-		var setStock = function(symbol, callback) {
-			var url = 'https://www.quandl.com/api/v3/datasets/YAHOO/' + symbol + '/data.json?api_key=s6jg7uYEzs79xzsdrz_y&start_date=2014-01-01&end_date=2015-12-25&order=asc';
+		var drawStock = function(stock, callback) {
+			var url = 'https://www.quandl.com/api/v3/datasets/YAHOO/' + stock + '/data.json?api_key=s6jg7uYEzs79xzsdrz_y&start_date=2014-01-01&end_date=2015-12-25&order=asc';
 			$http.get(url)
 				.then(function(res) {
 					var dataSet = [];
@@ -146,7 +134,7 @@ angular.module('sl', [])
 					});
 
 					dataSet = {
-						title: symbol,
+						title: stock,
 						compared: true,
 						fieldMappings: [{
 							fromField: 'value',
@@ -158,10 +146,8 @@ angular.module('sl', [])
 						categoryField: 'date',
 						dataProvider: dataProvider
 					};
-
 					vm.chart.dataSets.push(dataSet);
 					vm.chart.validateData();
-					vm.symbols.push(symbol);
 
 					callback(false);
 				})
@@ -171,55 +157,86 @@ angular.module('sl', [])
 				});
 		};
 
-		vm.addStock = function() {
-			var s = vm.s.toUpperCase();
-			vm.s = '';
-
-			// If symbol already on list, notify
-			if (vm.symbols.indexOf(s) > -1) {
-				vm.msg = 'Symbol "' + s + '" is already on the list.';
-			} else {
-				setStock(s, function(err) {
-					if (err) {
-						vm.msg = 'Apologies, could not add symbol "' + s + '"';
-					} else {
-						vm.msg = 'Added symbol "' + s + '"';
-						ws.send(JSON.stringify({
-							'action': 'add',
-							symbol: s
-						}));
-					}
-				});
+		var addStockToAll = function(stock) {
+			if (vm.stocks.indexOf(stock) === -1) {
+				vm.stocks.push(stock);
+				drawStock(stock, errFunc);
 			}
 		};
 
-		vm.removeSymbol = function(stock) {
-			var idx = vm.symbols.indexOf(stock);
-
-			// If symbol is still in list (may not be the case if change happened on this client)
+		var removeStockFromAll = function(stock) {
+			var idx = vm.stocks.indexOf(stock);
+			// If stock is still in list (may not be the case if change happened on this client)
 			if (idx > -1) {
-				vm.symbols.splice(idx, 1);
-				ws.send(JSON.stringify({
-					'action': 'remove',
-					symbol: stock
-				}));
-
-				// Remove stock from datasets array
+				vm.stocks.splice(idx, 1);
+				$scope.$apply();
 				for (var i = 0; i < vm.chart.dataSets.length; i++) {
 					if (vm.chart.dataSets[i].title === stock) {
-						vm.chart.dataSets.splice(idx, 1);
+						vm.chart.dataSets.splice(i, 1);
 						vm.chart.validateData();
 					}
 				}
 			}
 		};
 
-		var errFunc = function(err) {
-			if (err) {
-				console.log('Error getting data for initial set of stocks.');
+		var initStocks = function(stocks) {
+			vm.stocks = [];
+			for (var i = 0; i < stocks.length; i++) {
+				addStockToAll(stocks[i]);
 			}
 		};
 
-		makeChart();
+		// Stock added on this client
+		vm.addStock = function() {
+			var stock = vm.newStock.toUpperCase();
+			vm.newStock = '';
+
+			// If symbol already on list, notify
+			if (vm.stocks.indexOf(stock) > -1) {
+				vm.msg = 'Symbol "' + stock + '" is already on the list.';
+			} else {
+				drawStock(stock, function(err) {
+					if (err) {
+						vm.msg = 'Apologies, could not add symbol "' + stock + '"';
+					} else {
+						vm.msg = 'Added symbol "' + stock + '"';
+						// Broadcast to other clients - including myself, thus triggering actions
+						vm.stocks.push(stock);
+						ws.send(JSON.stringify({
+							'action': 'add',
+							stock: stock
+						}));
+					}
+				});
+			}
+		};
+
+		vm.removeStock = function(stock) {
+			ws.send(JSON.stringify({
+				'action': 'remove',
+				stock: stock
+			}));
+		};
+
+		ws.onmessage = function(payload) {
+			if (payload) {
+				var msg = JSON.parse(payload.data);
+				// console.log('* ON MESSAGE: ', msg);
+				switch (msg.action) {
+					case 'init':
+						// Load stocks into chart and Angular div
+						initStocks(msg.stocks);
+						break;
+					case 'add':
+						addStockToAll(msg.stock);
+						break;
+					case 'remove':
+						removeStockFromAll(msg.stock);
+						break;
+				}
+			}
+		};
+
+		drawChart();
 
 }]);
