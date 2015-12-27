@@ -1,0 +1,8 @@
+Steps
+
+OK - Func: Display charts for all initial symbols (data sets selected)
+- Func: Add symbol, have it displayed on chart
+- Func: Symbol removeable by clicking cross
+- Func: Build websocket server to sync changes
+- Workflow: Set up gulp for sass
+- Style app
