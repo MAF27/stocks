@@ -2,26 +2,30 @@ header {
 	background: linear-gradient(to bottom, rgba(0, 0, 0, .2), rgba(0, 0, 0, .9)), url('../images/exchange.jpg');
 	background-position: center;
 	background-repeat: no-repeat;
-	height: 120px;
+	height: 11%;
 	margin-bottom: 20px;
 	position: relative;
 	width: 100%;
 }
 
 header .logo {
+	bottom: 10%;
 	color: white;
 	font-size: 3.2em;
 	font-weight: 900;
-	left: 25px;
+	left: 20px;
+	margin: 0;
+	padding: 0;
 	position: absolute;
 	text-decoration: none;
-	top: -10px;
 	z-index: 1;
 }
 
 header .instruction {
+	bottom: 25px;
 	color: white;
+	margin: 0;
+	padding: 0;
 	position: absolute;
 	right: 10px;
-	top: 30px;
 }

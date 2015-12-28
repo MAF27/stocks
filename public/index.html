@@ -19,7 +19,7 @@
 				<p class="instruction">Add any US ticker symbol - stock selection is synchronized across clients</p>
 			</header>
 
-			<div id="chartdiv" style="width:100%; height:600px;"></div>
+			<div id="chartdiv"></div>
 
 			<section class="stocklist">
 				<div class="stocks">
@@ -28,13 +28,12 @@
 							<span ng-click="vm.removeStock(stock);">x</span>
 						</p>
 					</div>
+					<form name="stockForm" ng-submit="vm.addStock()">
+						<input type="text" ng-model="vm.newStock" autofocus="true">
+						<input type="submit" value="Add Stock">
+					</form>
 				</div>
-
-				<form name="stockForm" ng-submit="vm.addStock()">
-					<input type="text" ng-model="vm.newStock" autofocus="true">
-					<input type="submit" value="Add Stock">
-				</form>
-				<p ng-bind="vm.msg"></p>
+				<p class="msg" ng-bind="vm.msg"></p>
 
 			</section>
 

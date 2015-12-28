@@ -7,17 +7,18 @@ body {
   color: #ddd;
   font-family: Lato, sans-serif;
   font-size: 16px;
-  height: 100%;
+  height: 99%;
   padding: 0; }
 
 #page {
-  height: 91%;
+  height: 92%;
   margin: 0 auto;
   max-width: 1280px;
   position: relative; }
 
 #chartdiv {
-  height: 50%; }
+  height: 70%;
+  width: 100%; }
 
 section {
   padding: 0 30px; }
@@ -28,11 +29,13 @@ section::after {
   display: block; }
 
 section.stocklist {
-  padding: 20px 0;
+  display: inline-block;
+  padding: 25px 0 5px;
   text-align: center;
   width: 90%; }
 
 section.stocklist div.stocks {
+  display: inline-block;
   padding: 10px; }
 
 section.stocklist div.ng-scope {
@@ -48,6 +51,10 @@ section.stocklist p.stock {
   padding: 3px 25px 3px 5px;
   position: relative; }
 
+section.stocklist p.msg {
+  margin: 0;
+  padding: 0; }
+
 section.stocklist p.stock span {
   color: white;
   cursor: pointer;
@@ -57,8 +64,11 @@ section.stocklist p.stock span {
   right: 5px;
   top: 1px; }
 
+section.stocklist form {
+  display: inline; }
+
 section.stocklist input {
-  display: inline-block; }
+  display: inline; }
 
 section.stocklist input[type='submit'] {
   background-color: rgba(210, 194, 121, 0.9);
@@ -68,7 +78,7 @@ section.stocklist input[type='submit'] {
   font-size: .9em;
   font-weight: 500;
   outline: none;
-  padding: 5px 10px;
+  padding: 4px 10px;
   -webkit-transition: background-color .5s;
   transition: background-color .5s; }
 
@@ -86,26 +96,30 @@ header {
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.9)), url("../images/exchange.jpg");
   background-position: center;
   background-repeat: no-repeat;
-  height: 120px;
+  height: 11%;
   margin-bottom: 20px;
   position: relative;
   width: 100%; }
 
 header .logo {
+  bottom: 10%;
   color: white;
   font-size: 3.2em;
   font-weight: 900;
-  left: 25px;
+  left: 20px;
+  margin: 0;
+  padding: 0;
   position: absolute;
   text-decoration: none;
-  top: -10px;
   z-index: 1; }
 
 header .instruction {
+  bottom: 25px;
   color: white;
+  margin: 0;
+  padding: 0;
   position: absolute;
-  right: 10px;
-  top: 30px; }
+  right: 10px; }
 
 footer {
   border-top: 1px solid darkgrey;

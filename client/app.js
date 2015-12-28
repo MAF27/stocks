@@ -213,6 +213,7 @@ angular.module('sl', [])
 		};
 
 		vm.removeStock = function(stock) {
+			vm.msg = '';
 			ws.send(JSON.stringify({
 				'action': 'remove',
 				stock: stock

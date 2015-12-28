@@ -1,10 +1,12 @@
 section.stocklist {
-	padding: 20px 0;
+	display: inline-block;
+	padding: 25px 0 5px;
 	text-align: center;
 	width: 90%;
 }
 
 section.stocklist div.stocks {
+	display: inline-block;
 	padding: 10px;
 }
 
@@ -23,6 +25,11 @@ section.stocklist p.stock {
 	position: relative;
 }
 
+section.stocklist p.msg {
+	margin: 0;
+	padding: 0;
+}
+
 section.stocklist p.stock span {
 	color: white;
 	cursor: pointer;
@@ -33,8 +40,12 @@ section.stocklist p.stock span {
 	top: 1px;
 }
 
+section.stocklist form {
+	display: inline;
+}
+
 section.stocklist input {
-	display: inline-block;
+	display: inline;
 }
 
 section.stocklist input[type='submit'] {
@@ -45,7 +56,7 @@ section.stocklist input[type='submit'] {
 	font-size: .9em;
 	font-weight: 500;
 	outline: none;
-	padding: 5px 10px;
+	padding: 4px 10px;
 	transition: background-color .5s;
 }
 
