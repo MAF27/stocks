@@ -111,7 +111,7 @@ gulp.task('watch', function() {
 	watchifyBundler.on('log', function(msg) {
 		console.log(msg);
 	});
-	gulp.watch('client/sass/index.scss', ['styles']);
+	gulp.watch('client/sass/*.scss', ['minify']);
 	return bundle();
 });
 

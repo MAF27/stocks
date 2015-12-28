@@ -16,7 +16,7 @@ angular.module('sl', [])
 		var drawChart = function() {
 			vm.chart = AmCharts.makeChart('chartdiv', {
 				type: 'stock',
-				theme: 'dark',
+				theme: 'chalk',
 
 				pathToImages: './images/',
 				dataSets: [], // will be set dynamically

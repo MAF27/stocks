@@ -1,0 +1,5 @@
+section.stocklist { padding: 20px 0; text-align: center; width: 90%; }
+section div.stocks { padding: 10px; }
+section div.ng-scope { display: inline-block; margin: auto; }
+section p.stock { background-color: lightblue; border: 1px solid lightblue; border-radius: 5px; margin: 0 5px; padding: 3px 25px 3px 5px; position: relative; }
+section p.stock span { color: white; cursor: pointer; font-size: .9em; font-weight: 700; position: absolute; right: 5px; top: 1px; }
