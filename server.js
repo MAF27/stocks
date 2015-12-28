@@ -1,16 +1,17 @@
 var express = require('express');
 var WebSocketServer = require('ws')
 	.Server;
-var wsport = process.env.PORT || 14163;
-var wss = new WebSocketServer({
-	port: wsport
-});
 var initSymbols = ['TSLA', 'NVDA', 'YHOO'];
 var app = express();
-var ip = process.env.IP || 'localhost';
-var port = process.env.PORT || 8080;
+var port = process.env.PORT || 5000;
 
 app.use(express.static('public'));
+var server = app.listen(port, function () {
+  console.log('Webserver listening at port %s', port);
+});
+var wss = new WebSocketServer({
+	server: server
+});
 
 wss.on('connection', function(ws) {
 	ws.on('message', function(message) {
@@ -41,8 +42,4 @@ wss.on('connection', function(ws) {
   ws.send(JSON.stringify(init));
 });
 
-console.log('Web Socket Server listening on port 3000. initSymbols: ', initSymbols);
-
-app.listen(port, function () {
-  console.log('Webserver listening at http://%s:%s', ip, port);
-});
+console.log('Web Socket Server started initSymbols %s ', initSymbols);
