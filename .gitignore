@@ -15,8 +15,6 @@ tmp
 
 # Dependency directory
 node_modules
-bower_components
-amcharts
 
 # Editors
 .idea
