@@ -1,0 +1,18 @@
+footer {
+	border-top: 1px solid darkgrey;
+	bottom: 0;
+	font-size: .9em;
+	height: 50px;
+	left: 0;
+	margin: 0 auto;
+	position: fixed;
+	right: 0;
+	text-align: center;
+	width: 100%;
+}
+
+footer a,
+footer a:visited {
+	color: $default-color;
+	text-decoration: none;
+}

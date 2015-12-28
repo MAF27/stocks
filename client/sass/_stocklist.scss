@@ -1,5 +1,61 @@
-section.stocklist { padding: 20px 0; text-align: center; width: 90%; }
-section div.stocks { padding: 10px; }
-section div.ng-scope { display: inline-block; margin: auto; }
-section p.stock { background-color: lightblue; border: 1px solid lightblue; border-radius: 5px; margin: 0 5px; padding: 3px 25px 3px 5px; position: relative; }
-section p.stock span { color: white; cursor: pointer; font-size: .9em; font-weight: 700; position: absolute; right: 5px; top: 1px; }
+section.stocklist {
+	padding: 20px 0;
+	text-align: center;
+	width: 90%;
+}
+
+section.stocklist div.stocks {
+	padding: 10px;
+}
+
+section.stocklist div.ng-scope {
+	display: inline-block;
+	margin: auto;
+}
+
+section.stocklist p.stock {
+	background-color: $pill-background;
+	border: 1px solid $pill-border;
+	border-radius: 5px;
+	color: $pill-color;
+	margin: 0 5px;
+	padding: 3px 25px 3px 5px;
+	position: relative;
+}
+
+section.stocklist p.stock span {
+	color: white;
+	cursor: pointer;
+	font-size: .9em;
+	font-weight: 700;
+	position: absolute;
+	right: 5px;
+	top: 1px;
+}
+
+section.stocklist input {
+	display: inline-block;
+}
+
+section.stocklist input[type='submit'] {
+	background-color: $submit-background;
+	border-radius: 5px;
+	color: $pill-background;
+	cursor: pointer;
+	font-size: .9em;
+	font-weight: 500;
+	outline: none;
+	padding: 5px 10px;
+	transition: background-color .5s;
+}
+
+section.stocklist input[type='submit']:hover {
+	background-color: transparentize($submit-background, .2);
+}
+
+section.stocklist input[type='text'] {
+	font-size: 1em;
+	height: 22px;
+	text-transform: uppercase;
+	width: 100px;
+}

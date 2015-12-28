@@ -3,7 +3,10 @@
 // Global Styling
 html,
 body {
-	color: #333;
+	background-image: url('../images/chalkboard.jpg');
+	background-position: cover;
+	background-repeat: no-repeat;
+	color: $default-color;
 	font-family: Lato, sans-serif;
 	font-size: 16px;
 	height: 100%;
@@ -11,14 +14,14 @@ body {
 }
 
 #page {
-	height: 92%;
+	height: 91%;
 	margin: 0 auto;
 	max-width: 1280px;
 	position: relative;
 }
 
 #chartdiv {
-	height: 80%;
+	height: 50%;
 }
 
 // ALL Sections

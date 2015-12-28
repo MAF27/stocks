@@ -16,7 +16,8 @@ angular.module('sl', [])
 		var drawChart = function() {
 			vm.chart = AmCharts.makeChart('chartdiv', {
 				type: 'stock',
-				theme: 'chalk',
+				theme: 'dark',
+				addClassNames: true,
 
 				pathToImages: './images/',
 				dataSets: [], // will be set dynamically
@@ -193,13 +194,13 @@ angular.module('sl', [])
 
 			// If symbol already on list, notify
 			if (vm.stocks.indexOf(stock) > -1) {
-				vm.msg = 'Symbol "' + stock + '" is already on the list.';
+				vm.msg = stock + ' is already on the list.';
 			} else {
 				drawStock(stock, function(err) {
 					if (err) {
 						vm.msg = 'Apologies, could not add symbol "' + stock + '"';
 					} else {
-						vm.msg = 'Added symbol "' + stock + '"';
+						vm.msg = '';
 						// Broadcast to other clients - including myself, thus triggering actions
 						vm.stocks.push(stock);
 						ws.send(JSON.stringify({
